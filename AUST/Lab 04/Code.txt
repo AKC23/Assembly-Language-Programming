@@ -1,0 +1,284 @@
+.model small
+.stack 100h
+.data
+
+msg1 db 3
+msg2 db ?  
+msg3 db 'I love BD $'
+    
+.code
+
+main proc                           
+    
+    ;initializing data segment(.data)
+    mov ax,@data       
+    mov ds,ax                 
+    
+    mov ah,2       ;for printing output
+    add msg1,48
+    mov dl,msg1
+    int 21h
+                   
+    mov ah,1       ;for taking single key  input
+    int 21h
+    mov msg2,al    ;by default data is saved in al register
+    
+    
+    ;for a new line(Line feed and carriage return)
+    mov ah,2
+    mov dl,10      ;line feed
+    int 21h
+    mov dl,13      ;carriage return
+    int 21h
+    
+    mov ah,2 
+    mov dl,msg2
+    int 21h
+    
+    ;for a new line(Line feed and carriage return)
+    mov ah,2
+    mov dl,10      ;line feed
+    int 21h
+    mov dl,13      ;carriage return
+    int 21h
+    
+    mov ah,9       ; 9-> character string output
+    lea dx,msg3 
+    int 21h
+               
+    exit:
+    mov ah,4ch
+    int 21h
+    main endp
+end main     
+
+
+; 1-> single key input
+; 2-> single character/integer output
+; 9-> character string output
+
+
+
+
+Lab 04
+
+Code 1
+
+Uppercase to lowercase
+
+.model small
+.stack 100h
+.data
+    msg1 db 'Uppercase letter:  $'
+    msg2 db 'Lowercase letter:  $'  
+    
+.code
+main proc
+    mov ax,@data
+    mov ds,ax
+                
+    mov ah,9
+    lea dx,msg1
+    int 21h
+    
+    mov ah,1
+    int 21h
+    mov bl,al      
+    
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    
+    mov ah,9
+    lea dx,msg2
+    int 21h
+    
+    mov ah,2
+    add bl,32 
+    mov dl,bl
+    int 21h
+    
+    exit:
+    mov ah,4ch
+    int 21h
+    main endp
+end main
+
+
+Code 2
+
+
+
+include 'emu8086.inc'
+.model small
+.stack 100h
+.data
+   msg1 db 'Input 1: $'
+   msg2 db 'Input 2: $'
+   msg3 db 'Sum is: $'
+   msg4 db 'Inputs are: $' 
+    
+.code
+main proc
+    mov ax,@data
+    mov ds,ax                   
+                   
+    mov ah,9
+    lea dx,msg1
+    int 21h
+
+    mov ah,1
+    int 21h
+    mov bl,al   
+    
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    
+    mov ah,9
+    lea dx,msg2
+    int 21h
+    
+    mov ah,1
+    int 21h 
+    mov cl,al    
+    
+    add bl,cl
+    
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    
+    mov ah,2
+    sub bl,48
+    mov dl,bl         
+             
+    mov al,58               ;initialize al = 10
+    cmp al,dl               ;comparing 10 with the answer
+                
+    jle show                ;value is less than 10
+        
+        mov ah,9
+        lea dx,msg3
+        int 21h
+        
+        mov ah,2
+        mov dl,bl
+        int 21h
+        
+        mov ah,2
+        mov dl,10
+        int 21h
+        mov dl,13
+        int 21h
+        
+        printn 'This value is less than 10'
+        mov ah,4ch
+        int 21h        
+                
+        show:
+            printn 'This value is not less than 10' 
+            mov ah,4ch
+            int 21h         
+             
+             
+    exit:
+    mov ah,4ch
+    int 21h
+    main endp
+end main
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.MODEL SMALL
+.STACK 100H
+.DATA
+    STR1 DB 0AH,0DH,'THE SUM OF '
+    FIRSTNUM DB ?
+    STR2 DB ' AND '
+    SECONDNUM DB ?
+    STR3 DB ' IS '
+    ANS DB ?
+    STR4 DB ' $'
+.CODE
+MAIN PROC
+ 
+    MOV AX,@DATA
+    MOV DS,AX
+ 
+    MOV AH,2
+    MOV DL,3FH
+    INT 21H
+ 
+    MOV AH,1
+    INT 21H
+    MOV BL,AL
+    MOV FIRSTNUM,AL
+    INT 21H
+    MOV SECONDNUM,AL
+ 
+    ADD BL,AL
+    SUB BL,30H
+    MOV ANS,BL
+ 
+    MOV AH,9
+    LEA DX,STR1   ;VARIABLE PRINTING FIRST TO LAST
+    INT 21H
+ 
+    MOV AH,4CH
+    INT 21H
+ 
+    MAIN ENDP
+END MAIN
+
+
+
+include 'emu8086.inc'
+.model small
+.stack 100h
+.data
+   msg1 db  'sum is greater than 10$'
+   msg2 db 'Less than 10 $'
+    
+.code
+main proc
+    mov ax,5
+    
+    cmp ax,5
+                
+    jz show
+        printn 'same'
+        mov ah,4ch
+        int 21h        
+                
+        show:
+            printn 'not same' 
+            mov ah,4ch
+            int 21h
+    exit:
+    main endp
+end main
+
+
+
